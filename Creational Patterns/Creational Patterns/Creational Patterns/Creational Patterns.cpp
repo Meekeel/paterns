@@ -2,110 +2,169 @@
 #include <string>
 using namespace std;
 
-// Абстрактный базовый класс (интерфейс) для всех персонажей
+/// \brief Абстрактный базовый класс для всех персонажей
 class Character {
 public:
-    // Чисто виртуальные методы - должны быть реализованы в классах-наследниках
-    virtual string getType() = 0;           // Возвращает тип персонажа
-    virtual string getName() { return getType(); }  // Возвращает имя (по умолчанию - тип)
-    virtual void attack() = 0;               // Метод атаки
-    virtual int getHealth() = 0;              // Возвращает здоровье
-    virtual ~Character() {}                    // Виртуальный деструктор
+    /// \brief Получить тип персонажа
+    /// \return Строка с типом персонажа
+    virtual string getType() = 0;
+
+    /// \brief Получить имя персонажа
+    /// \return Строка с именем персонажа
+    virtual string getName() { return getType(); }
+
+    /// \brief Выполнить атаку персонажа
+    virtual void attack() = 0;
+
+    /// \brief Получить здоровье персонажа
+    /// \return Количество здоровья
+    virtual int getHealth() = 0;
+
+    /// \brief Виртуальный деструктор
+    virtual ~Character() {}
 };
 
-// Конкретный класс Воина
+/// \brief Класс Воина
 class Warrior : public Character {
 public:
-    string getType() override { return "Воин"; }  // Переопределяем тип
-    void attack() override { cout << "Воин атакует мечом!" << endl; }  // Своя реализация атаки
-    int getHealth() override { return 100; }  // Своё значение здоровья
+    /// \brief Получить тип персонажа
+    /// \return Строка "Воин"
+    string getType() override { return "Воин"; }
+
+    /// \brief Выполнить атаку мечом
+    void attack() override { cout << "Воин атакует мечом!" << endl; }
+
+    /// \brief Получить здоровье воина
+    /// \return 100 HP
+    int getHealth() override { return 100; }
 };
 
-// Конкретный класс Мага (обратите внимание: в оригинале было "Мар" - опечатка)
+/// \brief Класс Мага
 class Mage : public Character {
 public:
-    string getType() override { return "Маг"; }  // Исправлено с "Мар" на "Маг"
+    /// \brief Получить тип персонажа
+    /// \return Строка "Маг"
+    string getType() override { return "Маг"; }
+
+    /// \brief Выполнить атаку огненным шаром
     void attack() override { cout << "Маг кастует огненный шар!" << endl; }
+
+    /// \brief Получить здоровье мага
+    /// \return 50 HP
     int getHealth() override { return 50; }
 };
 
-// Конкретный класс Лучника
+/// \brief Класс Лучника
 class Archer : public Character {
 public:
+    /// \brief Получить тип персонажа
+    /// \return Строка "Лучник"
     string getType() override { return "Лучник"; }
+
+    /// \brief Выполнить атаку из лука
     void attack() override { cout << "Лучник стреляет из лука!" << endl; }
+
+    /// \brief Получить здоровье лучника
+    /// \return 70 HP
     int getHealth() override { return 70; }
 };
 
-// Конкретный класс Рыцаря
+/// \brief Класс Рыцаря
 class Knight : public Character {
 public:
+    /// \brief Получить тип персонажа
+    /// \return Строка "Рыцарь"
     string getType() override { return "Рыцарь"; }
+
+    /// \brief Выполнить атаку копьём
     void attack() override { cout << "Рыцарь атакует копьём!" << endl; }
+
+    /// \brief Получить здоровье рыцаря
+    /// \return 80 HP
     int getHealth() override { return 80; }
 };
 
-// Абстрактная фабрика для создания персонажей (паттерн "Фабричный метод")
+/// \brief Абстрактная фабрика для создания персонажей (паттерн "Фабричный метод")
 class CharacterFactory {
 public:
-    // Фабричный метод - создает персонажа (чисто виртуальный)
+    /// \brief Функция для выделения памяти на класс персонажа
+    /// \return Возвращает указатель на созданного персонажа
     virtual Character* createCharacter() = 0;
+
+    /// \brief Виртуальный деструктор
     virtual ~CharacterFactory() {}
 
-    // Шаблонный метод, использующий фабричный метод
+    /// \brief Создать персонажа и выполнить атаку
+    /// \note Используется для демонстрации работы фабрики
     void spawnAndAttack() {
-        Character* chara = createCharacter();  // Создаем персонажа через фабрику
+        Character* chara = createCharacter();
         cout << "Создан " << chara->getName() << " с здоровьем " << chara->getHealth() << ". ";
-        chara->attack();  // Вызываем атаку
-        delete chara;      // Освобождаем память
+        chara->attack();
+        delete chara;
     }
 };
 
-// Конкретная фабрика для создания Воина
+/// \brief Класс для создания Воина
 class WarriorFactory : public CharacterFactory {
 public:
+    /**
+     * \brief Функция для выделения памяти на класс персонажа
+     * \return Возвращает указатель на созданного персонажа
+     */
     Character* createCharacter() override { return new Warrior(); }
 };
 
-// Конкретная фабрика для создания Мага
+/// \brief Класс для создания Мага
 class MageFactory : public CharacterFactory {
 public:
+    /**
+     * \brief Функция для выделения памяти на класс персонажа
+     * \return Возвращает указатель на созданного персонажа
+     */
     Character* createCharacter() override { return new Mage(); }
 };
 
-// Конкретная фабрика для создания Лучника
+/// \brief Класс для создания Лучника
 class ArcherFactory : public CharacterFactory {
 public:
+    /**
+     * \brief Функция для выделения памяти на класс персонажа
+     * \return Возвращает указатель на созданного персонажа
+     */
     Character* createCharacter() override { return new Archer(); }
 };
 
-// Конкретная фабрика для создания Рыцаря
+/// \brief Класс для создания Рыцаря
 class KnightFactory : public CharacterFactory {
 public:
+    /**
+     * \brief Функция для выделения памяти на класс персонажа
+     * \return Возвращает указатель на созданного персонажа
+     */
     Character* createCharacter() override { return new Knight(); }
 };
 
-int main() {
-    setlocale(LC_ALL, "rus");  // Устанавливаем русскую локализацию для вывода
+/// \brief Функция для запуска конвейера с персонажами
+/// \note Используется для учебного кода
+int main()
+{
+    setlocale(LC_ALL, "rus");
 
-    // Создаем воина через фабрику
+    // Симуляция игры: создаем разных персонажей через фабрики
     CharacterFactory* factory = new WarriorFactory();
-    factory->spawnAndAttack();  // Создаем и атакуем
-    delete factory;  // Освобождаем память фабрики
+    factory->spawnAndAttack(); // Вывод: Создан Воин с здоровьем 100. Воин атакует мечом!
+    delete factory;
 
-    // Создаем мага через фабрику
     factory = new MageFactory();
-    factory->spawnAndAttack();
+    factory->spawnAndAttack(); // Вывод: Создан Маг с здоровьем 50. Маг кастует огненный шар!
     delete factory;
 
-    // Создаем лучника через фабрику
     factory = new ArcherFactory();
-    factory->spawnAndAttack();
+    factory->spawnAndAttack(); // Вывод: Создан Лучник с здоровьем 70. Лучник стреляет из лука!
     delete factory;
 
-    // Создаем рыцаря через фабрику
     factory = new KnightFactory();
-    factory->spawnAndAttack();
+    factory->spawnAndAttack(); // Вывод: Создан Рыцарь с здоровьем 80. Рыцарь атакует копьём!
     delete factory;
 
     return 0;
